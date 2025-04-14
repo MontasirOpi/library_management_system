@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:library_management_system/app/assets_path.dart';
+import 'package:library_management_system/features/auth/ui/screens/login_reg_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginRegScreen()),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +34,11 @@ class SplashScreen extends StatelessWidget {
               AssetsPath.appLogoSvg,
               width: 200,
               height: 200,
-              placeholderBuilder:
-                  (context) => CircularProgressIndicator(),
+              placeholderBuilder: (context) => const CircularProgressIndicator(),
               semanticsLabel: 'App Logo',
             ),
-
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Library Management System',
               style: TextStyle(
                 fontSize: 24,
@@ -30,8 +46,6 @@ class SplashScreen extends StatelessWidget {
                 color: Colors.deepPurple,
               ),
             ),
-            const SizedBox(height: 20),
-           
           ],
         ),
       ),
