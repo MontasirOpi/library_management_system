@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
-import 'package:library_management_system/features/auth/ui/screens/registation_screen.dart';
+import 'package:library_management_system/features/auth/model/auth_service.dart';
+import 'package:library_management_system/features/auth/ui/screens/login_screen.dart';
+
 import 'package:library_management_system/features/common/widgets/build_text_field_widget.dart';
 import 'package:library_management_system/features/common/widgets/custom_button.dart';
 
@@ -14,25 +16,36 @@ class RegistationProfileScreen extends StatefulWidget {
 
 class _RegistationProfileScreenState
     extends State<RegistationProfileScreen> {
-  final TextEditingController nameController =
-      TextEditingController();
-  final TextEditingController rollController =
-      TextEditingController();
-  final TextEditingController emailController =
-      TextEditingController();
-  final TextEditingController passwordController =
-      TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final authService = AuthService();
+  final _nameController = TextEditingController();
+  final _rollController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  @override
-  void dispose() {
-    nameController.dispose();
-    rollController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    super.dispose();
+  void signUp() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    final confirmPassword = _passwordController.text;
+
+    if (password != confirmPassword) {
+      // Handle password mismatch (e.g., show a snackbar or dialog)
+      print('Passwords do not match');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Passwords do not match')),
+      );
+      return;
+    }
+    try {
+      await authService.signUpWithEmailPassword(email, password);
+      Navigator.pop(context);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -77,36 +90,38 @@ class _RegistationProfileScreenState
               const SizedBox(height: 20),
               BuildTextField(
                 hintText: "Name",
-                controller: nameController,
+                controller: _nameController,
               ),
               const SizedBox(height: 10),
               BuildTextField(
                 hintText: "University Roll No.",
-                controller: rollController,
+                controller: _rollController,
               ),
               const SizedBox(height: 10),
               BuildTextField(
                 hintText: "Email Id",
-                controller: emailController,
+                controller: _emailController,
               ),
               const SizedBox(height: 10),
-            
+              BuildTextField(
+                hintText: 'Set Password',
+                controller: _passwordController,
+              ),
+              const SizedBox(height: 16),
+              BuildTextField(
+                hintText: 'Confirm Password',
+                controller: _confirmPasswordController,
+              ),
+
               const SizedBox(height: 30),
               CustomButton(
                 text: 'SAVE & NEXT',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RegistationScreen(),
-                    ),
-                  );
-                },
+                onPressed: signUp
               ),
-                      ],
-                    ),
-                  ),
-                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
