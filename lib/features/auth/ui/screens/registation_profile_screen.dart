@@ -90,15 +90,7 @@ class _RegistationProfileScreenState
                 controller: emailController,
               ),
               const SizedBox(height: 10),
-              BuildTextField(
-                hintText: "Password",
-                controller: passwordController,
-              ),
-              const SizedBox(height: 10),
-              BuildTextField(
-                hintText: "Confirm Password",
-                controller: confirmPasswordController,
-              ),
+            
               const SizedBox(height: 30),
               CustomButton(
                 text: 'SAVE & NEXT',
