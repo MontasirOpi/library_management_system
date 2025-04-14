@@ -103,10 +103,10 @@ class _RegistationProfileScreenState
                   );
                 },
               ),
-            ],
-          ),
-        ),
-      ),
+                      ],
+                    ),
+                  ),
+                ),
     );
   }
 }
