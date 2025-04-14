@@ -70,6 +70,7 @@ class BuildSection extends StatelessWidget {
               return SizedBox(
                 width: 150,
                 child: Card(
+                  color: Colors.white, // Set background color to white
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),

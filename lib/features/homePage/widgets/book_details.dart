@@ -10,6 +10,7 @@ class BookDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: SingleChildScrollView(
@@ -84,7 +85,7 @@ class BookDetails extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Book Issued: ${book.title}'),
-                        duration: const Duration(seconds: 3),
+                        duration: const Duration(seconds: 2),
                       ),
                     );
                   },

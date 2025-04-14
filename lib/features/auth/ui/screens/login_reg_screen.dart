@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/app/assets_path.dart';
 import 'package:library_management_system/features/auth/ui/screens/login_screen.dart';
 import 'package:library_management_system/features/auth/ui/screens/registation_profile_screen.dart';
@@ -13,19 +12,13 @@ class LoginRegScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          
+
           children: [
-            
-            SvgPicture.asset(
-              AssetsPath.appLogoSvg,
-              width: 250,
-              height: 250,
-            ),
+            SvgPicture.asset(AssetsPath.appLogoSvg, width: 250, height: 250),
             SizedBox(height: 20),
             Text(
               'Welcome ',
@@ -39,10 +32,7 @@ class LoginRegScreen extends StatelessWidget {
             Text(
               'A collection of materials, books, and resources for students and faculty members.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[700],
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
             ),
             const SizedBox(height: 20),
             CustomButton(
@@ -50,9 +40,7 @@ class LoginRegScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                 );
               },
             ),
