@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:library_management_system/app/assets_path.dart';
 import 'package:library_management_system/features/common/widgets/build_text_field_widget.dart';
 import 'package:library_management_system/features/common/widgets/custom_button.dart';
+import 'package:library_management_system/features/homePage/ui/screens/homepage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,10 +13,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController =
-      TextEditingController();
-  final TextEditingController passwordController =
-      TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -27,19 +26,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login'),
-      backgroundColor: Colors.white,),
+      appBar: AppBar(title: Text('Login'), backgroundColor: Colors.white),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              SvgPicture.asset(
-                AssetsPath.appLoginSvg,
-                width: 200,
-                height: 200,
-              ),
+              SvgPicture.asset(AssetsPath.appLoginSvg, width: 200, height: 200),
               SizedBox(height: 20),
               Text(
                 'Login To Your Account',
@@ -50,17 +44,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              BuildTextField(
-                hintText: "Email Id",
-                controller: emailController,
-              ),
+              BuildTextField(hintText: "Email Id", controller: emailController),
               SizedBox(height: 20),
               BuildTextField(
                 hintText: "Password",
                 controller: passwordController,
               ),
               SizedBox(height: 20),
-              CustomButton(text: 'LOGIN', onPressed: () {}),
+              CustomButton(
+                text: 'LOGIN',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+              ),
             ],
           ),
         ),
