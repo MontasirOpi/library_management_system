@@ -22,37 +22,35 @@ class Search extends StatelessWidget {
             builder:
                 (context) => AlertDialog(
                   title: const Text("Search Results"),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children:
-                          foundBooks
-                              .map(
-                                (book) => Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children:
+                        foundBooks
+                            .map(
+                              (book) => Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                elevation: 4,
+                                child: ListTile(
+                                  leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.asset(
+                                      book.image,
+                                      height: 50,
+                                      width: 50,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                  elevation: 4,
-                                  child: ListTile(
-                                    leading: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.asset(
-                                        book.image,
-                                        height: 50,
-                                        width: 50,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    title: Text(book.title),
-                                    trailing: IconButton(
-                                      icon: const Icon(Icons.arrow_forward),
-                                      onPressed: () {},
-                                    ),
+                                  title: Text(book.title),
+                                  trailing: IconButton(
+                                    icon: const Icon(Icons.arrow_forward),
+                                    onPressed: () {},
                                   ),
                                 ),
-                              )
-                              .toList(),
-                    ),
+                              ),
+                            )
+                            .toList(),
                   ),
                   actions: [
                     TextButton(
