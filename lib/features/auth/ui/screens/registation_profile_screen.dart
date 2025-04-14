@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/auth/ui/screens/registation_screen.dart';
-import 'package:library_management_system/features/auth/ui/screens/widgets/build_text_field_widget.dart';
-import 'package:library_management_system/features/auth/ui/screens/widgets/custom_button.dart';
+import 'package:library_management_system/features/common/widgets/build_text_field_widget.dart';
+import 'package:library_management_system/features/common/widgets/custom_button.dart';
 
 class RegistationProfileScreen extends StatefulWidget {
   const RegistationProfileScreen({super.key});

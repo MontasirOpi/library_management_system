@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:library_management_system/app/assets_path.dart';
-import 'package:library_management_system/features/auth/ui/screens/widgets/build_text_field_widget.dart';
-import 'package:library_management_system/features/auth/ui/screens/widgets/custom_button.dart';
+import 'package:library_management_system/features/common/widgets/build_text_field_widget.dart';
+import 'package:library_management_system/features/common/widgets/custom_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

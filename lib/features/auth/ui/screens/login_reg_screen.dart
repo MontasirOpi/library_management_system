@@ -5,7 +5,7 @@ import 'package:library_management_system/app/assets_path.dart';
 import 'package:library_management_system/features/auth/ui/screens/login_screen.dart';
 import 'package:library_management_system/features/auth/ui/screens/registation_profile_screen.dart';
 import 'package:library_management_system/features/auth/ui/screens/registation_screen.dart';
-import 'package:library_management_system/features/auth/ui/screens/widgets/custom_button.dart';
+import 'package:library_management_system/features/common/widgets/custom_button.dart';
 
 class LoginRegScreen extends StatelessWidget {
   const LoginRegScreen({super.key});
