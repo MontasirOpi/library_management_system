@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:library_management_system/features/auth/ui/screens/login_reg_screen.dart';
+import 'package:library_management_system/features/auth/ui/screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +18,8 @@ class MyApp extends StatelessWidget {
   
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: //SplashScreen(),
+      LoginRegScreen(),
     );
   }
 }
