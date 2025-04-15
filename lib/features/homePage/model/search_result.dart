@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_management_system/features/homePage/ui/screens/book_details.dart';
+import 'package:library_management_system/features/homePage/widgets/book_details.dart';
 import 'package:library_management_system/features/homePage/data/book.dart';
 
 class SearchResult extends StatelessWidget {

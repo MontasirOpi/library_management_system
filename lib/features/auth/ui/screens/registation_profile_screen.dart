@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/features/auth/model/auth_service.dart';
-
 import 'package:library_management_system/features/common/widgets/build_text_field_widget.dart';
 import 'package:library_management_system/features/common/widgets/custom_button.dart';
 
@@ -21,26 +20,32 @@ class _RegistationProfileScreenState extends State<RegistationProfileScreen> {
   final _confirmPasswordController = TextEditingController();
 
   void signUp() async {
-    final email = _emailController.text;
-    final password = _passwordController.text;
-    final confirmPassword = _passwordController.text;
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
+    final name = _nameController.text.trim();
+    final roll = _rollController.text.trim();
 
     if (password != confirmPassword) {
-      // Handle password mismatch (e.g., show a snackbar or dialog)
-      print('Passwords do not match');
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Passwords do not match')),
+      );
       return;
     }
+
     try {
-      await authService.signUpWithEmailPassword(email, password);
-      Navigator.pop(context);
+      await authService.signUpWithEmailPassword(
+        email,
+        password,
+        name: name,
+        roll: roll,
+      );
+      Navigator.pop(context); // You can navigate to login or home
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Registration failed: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed: $e')),
+        );
       }
     }
   }
@@ -106,7 +111,6 @@ class _RegistationProfileScreenState extends State<RegistationProfileScreen> {
                 hintText: 'Confirm Password',
                 controller: _confirmPasswordController,
               ),
-
               const SizedBox(height: 30),
               CustomButton(text: 'SAVE & NEXT', onPressed: signUp),
             ],
