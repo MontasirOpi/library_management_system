@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/auth/ui/screens/logout.dart';
+import 'package:library_management_system/features/homePage/widgets/app_drawer.dart';
 import 'package:library_management_system/features/homePage/model/build_section.dart';
 import 'package:library_management_system/features/homePage/model/search.dart';
 
@@ -10,6 +11,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      drawer: const AppDrawer(),
+
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -18,9 +22,12 @@ class HomePage extends StatelessWidget {
           style: TextStyle(color: AppColors.themeColor, fontSize: 20),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: AppColors.themeColor),
-          onPressed: () {},
+        leading: Builder(
+          builder:
+              (context) => IconButton(
+                icon: Icon(Icons.menu, color: AppColors.themeColor),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
         ),
         actionsIconTheme: const IconThemeData(color: AppColors.themeColor),
         actions: [

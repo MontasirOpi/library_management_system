@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/auth/model/auth_service.dart';
-import 'package:library_management_system/features/auth/ui/screens/login_screen.dart';
 
 import 'package:library_management_system/features/common/widgets/build_text_field_widget.dart';
 import 'package:library_management_system/features/common/widgets/custom_button.dart';
@@ -14,8 +12,7 @@ class RegistationProfileScreen extends StatefulWidget {
       _RegistationProfileScreenState();
 }
 
-class _RegistationProfileScreenState
-    extends State<RegistationProfileScreen> {
+class _RegistationProfileScreenState extends State<RegistationProfileScreen> {
   final authService = AuthService();
   final _nameController = TextEditingController();
   final _rollController = TextEditingController();
@@ -31,9 +28,9 @@ class _RegistationProfileScreenState
     if (password != confirmPassword) {
       // Handle password mismatch (e.g., show a snackbar or dialog)
       print('Passwords do not match');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
       return;
     }
     try {
@@ -41,9 +38,9 @@ class _RegistationProfileScreenState
       Navigator.pop(context);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Registration failed: $e')));
       }
     }
   }
@@ -88,10 +85,7 @@ class _RegistationProfileScreenState
               const SizedBox(height: 8),
               const Text("Add Photo", style: TextStyle(fontSize: 16)),
               const SizedBox(height: 20),
-              BuildTextField(
-                hintText: "Name",
-                controller: _nameController,
-              ),
+              BuildTextField(hintText: "Name", controller: _nameController),
               const SizedBox(height: 10),
               BuildTextField(
                 hintText: "University Roll No.",
@@ -114,10 +108,7 @@ class _RegistationProfileScreenState
               ),
 
               const SizedBox(height: 30),
-              CustomButton(
-                text: 'SAVE & NEXT',
-                onPressed: signUp
-              ),
+              CustomButton(text: 'SAVE & NEXT', onPressed: signUp),
             ],
           ),
         ),

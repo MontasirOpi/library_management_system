@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/homePage/data/book_list.dart';
+import 'package:library_management_system/features/homePage/model/search_result.dart';
 
 class Search extends StatelessWidget {
   const Search({super.key});
@@ -9,6 +10,9 @@ class Search extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       onSubmitted: (query) {
+        if (query.trim().isEmpty) {
+          return;
+        }
         final foundBooks =
             BookList.books
                 .where(
@@ -21,37 +25,16 @@ class Search extends StatelessWidget {
             context: context,
             builder:
                 (context) => AlertDialog(
+                  backgroundColor: Colors.white,
                   title: const Text("Search Results"),
                   content: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children:
                           foundBooks
-                              .map(
-                                (book) => Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  elevation: 4,
-                                  child: ListTile(
-                                    leading: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.asset(
-                                        book.image,
-                                        height: 50,
-                                        width: 50,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    title: Text(book.title),
-                                    trailing: IconButton(
-                                      icon: const Icon(Icons.arrow_forward),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
+                                  .map((book) => SearchResult(book: book))
+                                  .toList()
+                              as List<Widget>,
                     ),
                   ),
                   actions: [
