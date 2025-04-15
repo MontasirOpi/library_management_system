@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:library_management_system/features/my%20profile/my_profile.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -25,7 +26,11 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.person, color: Colors.indigo),
             title: const Text('My Profile'),
             onTap: () {
-              // Navigate to Profile Page
+              // Navigate to My Profile Page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyProfile()),
+              );
             },
           ),
           ListTile(
