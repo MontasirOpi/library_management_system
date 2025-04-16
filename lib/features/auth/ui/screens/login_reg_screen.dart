@@ -14,49 +14,59 @@ class LoginRegScreen extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
 
-          children: [
-            SvgPicture.asset(AssetsPath.appLogoSvg, width: 250, height: 250),
-            SizedBox(height: 20),
-            Text(
-              'Welcome ',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'A collection of materials, books, and resources for students and faculty members.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-            ),
-            const SizedBox(height: 20),
-            CustomButton(
-              text: 'Login',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            CustomButton(
-              text: 'New Register',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RegistationProfileScreen(),
+              children: [
+                SvgPicture.asset(
+                  AssetsPath.appLogoSvg,
+                  width: 250,
+                  height: 250,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Welcome ',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                );
-              },
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'A collection of materials, books, and resources for students and faculty members.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                ),
+                const SizedBox(height: 20),
+                CustomButton(
+                  text: 'Login',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+                CustomButton(
+                  text: 'New Register',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegistationProfileScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
+import 'package:library_management_system/features/common/widgets/custom_button.dart';
 import 'package:library_management_system/features/homePage/data/book.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BookDetails extends StatelessWidget {
   final Book book;
 
-  const BookDetails({Key? key, required this.book}) : super(key: key);
+  const BookDetails({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.themeColor,
-        title: const Text('Book Details', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Book Details',
+          style: TextStyle(color: AppColors.themeColor),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
+          icon: const Icon(Icons.close, color: AppColors.themeColor),
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
@@ -24,13 +28,11 @@ class BookDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Book cover image
+            // Book Image
             Container(
               height: 250,
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.themeColor.withOpacity(0.1),
-              ),
+              color: AppColors.themeColor.withOpacity(0.1),
               child: Center(
                 child: Hero(
                   tag: book.title,
@@ -39,30 +41,22 @@ class BookDetails extends StatelessWidget {
                     height: 200,
                     fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 200,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Icon(Icons.book, size: 50, color: Colors.grey),
-                        ),
+                      return const Icon(
+                        Icons.broken_image,
+                        size: 100,
+                        color: Colors.grey,
                       );
                     },
                   ),
                 ),
               ),
             ),
-            
-            // Book details
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
                   Text(
                     book.title,
                     style: const TextStyle(
@@ -70,46 +64,59 @@ class BookDetails extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (book.subtitle.isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      book.subtitle,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
+                  if (book.subtitle.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        book.subtitle,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
-                  ],
-                  
                   const SizedBox(height: 16),
-                  
-                  // Availability indicator
+
+                  // Stock
                   Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: book.stock > 0 ? Colors.green : Colors.red,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          book.stock > 0 ? 'Available' : 'Out of Stock',
-                          style: const TextStyle(color: Colors.white),
-                        ),
+                      ValueListenableBuilder<int>(
+                        valueListenable: book.stockNotifier,
+                        builder: (context, stock, child) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: stock > 0 ? Colors.green : Colors.red,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              stock > 0 ? 'Available' : 'Out of Stock',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(width: 8),
-                      Text('${book.stock} copies in stock'),
+                      ValueListenableBuilder<int>(
+                        valueListenable: book.stockNotifier,
+                        builder: (context, stock, child) {
+                          return Text('$stock copies in stock');
+                        },
+                      ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
-                  // Details card
+
+                  // Book Info
                   Card(
-                    elevation: 2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    elevation: 2,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -124,84 +131,75 @@ class BookDetails extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
-                  // Description
+
                   const Text(
                     'Description',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     book.description,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      height: 1.5,
-                    ),
+                    style: const TextStyle(fontSize: 16, height: 1.5),
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
-                  // Action buttons
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: book.stock > 0 
-                              ? () {
-                                  // Implement borrow functionality
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Book borrowed successfully')),
-                                  );
-                                  Navigator.pop(context);
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.themeColor,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            'Borrow Book',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            // Implement reserve functionality
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Book reserved successfully')),
-                            );
-                            Navigator.pop(context);
-                          },
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: AppColors.themeColor),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Text(
-                            'Reserve',
-                            style: TextStyle(fontSize: 16, color: AppColors.themeColor),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomButton(
+          text: 'Borrow Book',
+          onPressed: () async {
+            final supabase = Supabase.instance.client;
+            final user = supabase.auth.currentUser;
+
+            if (user == null || book.stock <= 0) return;
+
+            try {
+              final existing = await supabase
+                  .from('issued_books')
+                  .select()
+                  .eq('book_id', book.id)
+                  .eq('user_id', user.id);
+
+              if (existing.isNotEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('You already borrowed this book.'),
+                  ),
+                );
+                return;
+              }
+
+              // ✅ Step 2: Borrow the book (insert + reduce stock)
+              await supabase.from('issued_books').insert({
+                'book_id': book.id,
+                'user_id': user.id,
+              });
+
+              await supabase
+                  .from('books')
+                  .update({'stock': book.stock - 1})
+                  .eq('id', book.id);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Book borrowed successfully')),
+              );
+
+              Navigator.pop(context);
+            } catch (e) {
+              print('Borrow error: $e');
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Error borrowing book')),
+              );
+            }
+          },
         ),
       ),
     );
@@ -211,7 +209,6 @@ class BookDetails extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             width: 100,
@@ -226,9 +223,7 @@ class BookDetails extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
         ],
