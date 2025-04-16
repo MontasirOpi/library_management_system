@@ -4,7 +4,10 @@ class AuthService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
   // Sign in with email and password
-  Future<AuthResponse> signInWithEmailPassword(String email, String password) async {
+  Future<AuthResponse> signInWithEmailPassword(
+    String email,
+    String password,
+  ) async {
     return await _supabase.auth.signInWithPassword(
       email: email,
       password: password,
@@ -21,10 +24,7 @@ class AuthService {
     return await _supabase.auth.signUp(
       email: email,
       password: password,
-      data: {
-        'name': name,
-        'roll': roll,
-      },
+      data: {'name': name, 'roll': roll},
     );
   }
 

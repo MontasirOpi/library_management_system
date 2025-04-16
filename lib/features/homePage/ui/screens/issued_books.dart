@@ -13,12 +13,14 @@ class IssuedBooks extends StatefulWidget {
 
 class _IssuedBooksState extends State<IssuedBooks> {
   final supabase = Supabase.instance.client;
+  String? userId;
   List<Book> issuedBooks = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    userId = supabase.auth.currentUser?.id;
     fetchIssuedBooks();
   }
 
@@ -27,8 +29,9 @@ class _IssuedBooksState extends State<IssuedBooks> {
       final response = await supabase
           .from('issued_books')
           .select(
-            'book:book_id (title, subtitle, category, image, publisher, genre, pages, stock, description, language)',
-          );
+            'book:book_id (id, title, subtitle, category, image, publisher, genre, pages, stock, description, language)',
+          )
+          .eq('user_id', userId!);
 
       final booksData = response as List;
 
@@ -45,6 +48,35 @@ class _IssuedBooksState extends State<IssuedBooks> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> returnBook(Book book) async {
+    try {
+      // Delete from issued_books
+      await supabase
+          .from('issued_books')
+          .delete()
+          .eq('book_id', book.id)
+          .eq('user_id', supabase.auth.currentUser!.id);
+
+      // Update book stock
+      await supabase
+          .from('books')
+          .update({'stock': book.stock + 1})
+          .eq('id', book.id);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Book returned successfully')),
+      );
+
+      // Refresh issued books list
+      fetchIssuedBooks();
+    } catch (e) {
+      print('Error returning book: $e');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Failed to return book')));
     }
   }
 
@@ -92,7 +124,7 @@ class _IssuedBooksState extends State<IssuedBooks> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: Image.asset(
+                            child: Image.network(
                               book.image,
                               height: 100,
                               width: 70,
@@ -116,12 +148,9 @@ class _IssuedBooksState extends State<IssuedBooks> {
                                   children: [
                                     ActionButton(
                                       text: 'Return',
-                                      onPressed: () {},
-                                    ),
-                                    const SizedBox(width: 12),
-                                    ActionButton(
-                                      text: 'Reissue',
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        returnBook(book);
+                                      },
                                     ),
                                   ],
                                 ),

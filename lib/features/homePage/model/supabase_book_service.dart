@@ -4,15 +4,14 @@ import 'package:library_management_system/features/homePage/data/book.dart';
 
 class BookService {
   final supabase = Supabase.instance.client;
-  
+
   Future<List<Book>> getAllBooks() async {
     try {
-      final data = await supabase
-          .from('books')
-          .select();
-          
+      final data = await supabase.from('books').select();
+
       return (data as List).map((bookData) {
         return Book(
+          id: bookData['id'] ?? '',
           title: bookData['title'] ?? '',
           subtitle: bookData['subtitle'] ?? '',
           category: bookData['category'] ?? '',
@@ -30,16 +29,17 @@ class BookService {
       return [];
     }
   }
-  
+
   Future<List<Book>> getBooksByCategory(String category) async {
     try {
       final data = await supabase
           .from('books')
           .select()
           .eq('category', category);
-      
+
       return (data as List).map((bookData) {
         return Book(
+          id: bookData['id'] ?? '',
           title: bookData['title'] ?? '',
           subtitle: bookData['subtitle'] ?? '',
           category: bookData['category'] ?? '',
@@ -57,63 +57,58 @@ class BookService {
       return [];
     }
   }
-  
+
   Future<void> addBook(Book book) async {
     try {
-      await supabase
-          .from('books')
-          .insert({
-            'title': book.title,
-            'subtitle': book.subtitle,
-            'category': book.category,
-            'image': book.image,
-            'publisher': book.publisher,
-            'genre': book.genre,
-            'pages': book.pages,
-            'stock': book.stock,
-            'description': book.description,
-            'language': book.language,
-          });
+      await supabase.from('books').insert({
+        'title': book.title,
+        'subtitle': book.subtitle,
+        'category': book.category,
+        'image': book.image,
+        'publisher': book.publisher,
+        'genre': book.genre,
+        'pages': book.pages,
+        'stock': book.stock,
+        'description': book.description,
+        'language': book.language,
+      });
     } catch (e) {
       print('Error adding book: $e');
       rethrow;
     }
   }
-  
+
   Future<void> updateBook(String bookId, Map<String, dynamic> data) async {
     try {
-      await supabase
-          .from('books')
-          .update(data)
-          .eq('id', bookId);
+      await supabase.from('books').update(data).eq('id', bookId);
     } catch (e) {
       print('Error updating book: $e');
       rethrow;
     }
   }
-  
+
   Future<void> deleteBook(String bookId) async {
     try {
-      await supabase
-          .from('books')
-          .delete()
-          .eq('id', bookId);
+      await supabase.from('books').delete().eq('id', bookId);
     } catch (e) {
       print('Error deleting book: $e');
       rethrow;
     }
   }
-  
+
   // Search function
   Future<List<Book>> searchBooks(String query) async {
     try {
       final data = await supabase
           .from('books')
           .select()
-          .or('title.ilike.%$query%,subtitle.ilike.%$query%,category.ilike.%$query%');
-          
+          .or(
+            'title.ilike.%$query%,subtitle.ilike.%$query%,category.ilike.%$query%',
+          );
+
       return (data as List).map((bookData) {
         return Book(
+          id: bookData['id'] ?? '',
           title: bookData['title'] ?? '',
           subtitle: bookData['subtitle'] ?? '',
           category: bookData['category'] ?? '',

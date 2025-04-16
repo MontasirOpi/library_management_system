@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _isLoading = true;
     });
-    
+
     try {
       final books = await _bookService.getAllBooks();
       // Extract unique categories
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       for (var book in books) {
         uniqueCategories.add(book.category);
       }
-      
+
       setState(() {
         _categories = uniqueCategories.toList();
         _isLoading = false;
@@ -46,9 +46,9 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load categories: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to load categories: $e')));
     }
   }
 
@@ -66,10 +66,11 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
         leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu, color: AppColors.themeColor),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
+          builder:
+              (context) => IconButton(
+                icon: Icon(Icons.menu, color: AppColors.themeColor),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
         ),
         actionsIconTheme: const IconThemeData(color: AppColors.themeColor),
         actions: [
@@ -90,33 +91,29 @@ class _HomePageState extends State<HomePage> {
               child: Search(),
             ),
             const SizedBox(height: 20),
-            
+
             // Sections
             Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _categories.isEmpty
+              child:
+                  _isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : _categories.isEmpty
                       ? const Center(child: Text('No categories available'))
                       : RefreshIndicator(
-                          onRefresh: _loadCategories,
-                          child: ListView.builder(
-                            itemCount: _categories.length,
-                            itemBuilder: (context, index) {
-                              return BuildSection(
-                                context: context,
-                                category: _categories[index],
-                              );
-                            },
-                          ),
+                        onRefresh: _loadCategories,
+                        child: ListView.builder(
+                          itemCount: _categories.length,
+                          itemBuilder: (context, index) {
+                            return BuildSection(
+                              context: context,
+                              category: _categories[index],
+                            );
+                          },
                         ),
+                      ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.themeColor,
-        child: Icon(Icons.refresh),
-        onPressed: _loadCategories,
       ),
     );
   }

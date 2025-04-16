@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+
 class Book {
+  final String id;
   final String title;
   final String subtitle;
   final String category;
@@ -9,8 +12,10 @@ class Book {
   final int stock;
   final String description;
   final String language;
+  final ValueNotifier<int> stockNotifier;
 
   Book({
+    required this.id,
     required this.title,
     required this.subtitle,
     required this.category,
@@ -21,10 +26,11 @@ class Book {
     required this.stock,
     required this.description,
     required this.language,
-  });
+  }) : stockNotifier = ValueNotifier<int>(stock);
 
   factory Book.fromMap(Map<String, dynamic> map) {
     return Book(
+      id: map['id'] ?? '',
       title: map['title'] ?? '',
       subtitle: map['subtitle'] ?? '',
       category: map['category'] ?? '',
