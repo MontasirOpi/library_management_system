@@ -152,7 +152,7 @@ class BookDetails extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(32.0),
         child: CustomButton(
           text: 'Borrow Book',
           onPressed: () async {
