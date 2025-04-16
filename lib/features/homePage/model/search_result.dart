@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/features/homePage/widgets/book_details.dart';
 import 'package:library_management_system/features/homePage/data/book.dart';
+import 'package:library_management_system/features/homePage/widgets/book_details_widget.dart';
 
 class SearchResult extends StatelessWidget {
   final Book book;
