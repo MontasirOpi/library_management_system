@@ -13,6 +13,7 @@ class BookList {
       stock: 10,
       description: 'A comprehensive guide to engineering mathematics.',
       language: 'English',
+      author: 'John Doe',
     ),
     Book(
       title: 'Linear Algebra',
@@ -25,6 +26,7 @@ class BookList {
       stock: 8,
       description: 'An introduction to linear algebra concepts.',
       language: 'English',
+      author: 'Jane Smith',
     ),
     Book(
       title: 'Engineering Maths',
@@ -37,6 +39,7 @@ class BookList {
       stock: 12,
       description: 'Advanced topics in engineering mathematics.',
       language: 'English',
+      author: 'Alice Johnson',
     ),
     Book(
       title: 'Principles of Physics',
@@ -49,6 +52,7 @@ class BookList {
       stock: 5,
       description: 'Fundamental principles of physics.',
       language: 'English',
+      author: 'Bob Brown',
     ),
     Book(
       title: 'Electrodynamics',
@@ -61,6 +65,7 @@ class BookList {
       stock: 7,
       description: 'A detailed study of electrodynamics.',
       language: 'English',
+      author: 'Charlie Davis',
     ),
     Book(
       title: 'Quantum Physics',
@@ -73,6 +78,7 @@ class BookList {
       stock: 6,
       description: 'An introduction to quantum physics.',
       language: 'English',
+      author: 'Diana Evans',
     ),
     Book(
       title: 'Advanced Inorganic Chemistry',
@@ -85,6 +91,7 @@ class BookList {
       stock: 4,
       description: 'Advanced topics in inorganic chemistry.',
       language: 'English',
+      author: 'Ethan Foster',
     ),
     Book(
       title: 'Physical Chemistry',
@@ -97,6 +104,7 @@ class BookList {
       stock: 9,
       description: 'A guide to physical chemistry.',
       language: 'English',
+      author: 'Fiona Green',
     ),
     Book(
       title: 'University Chemistry',
@@ -109,6 +117,7 @@ class BookList {
       stock: 11,
       description: 'Chemistry for university students.',
       language: 'English',
+      author: 'George Harris',
     ),
   ];
 }

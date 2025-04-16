@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:library_management_system/features/common/widgets/action_button.dart';
 import 'package:library_management_system/features/homePage/data/book_list.dart';
 import 'package:library_management_system/features/homePage/widgets/book_details.dart';
 import 'package:library_management_system/features/homePage/data/book.dart';
@@ -24,6 +25,7 @@ class BuildSection extends StatelessWidget {
       stock: int.tryParse(bookMap['stock'] ?? '0') ?? 0,
       description: bookMap['description'] ?? '',
       language: bookMap['language'] ?? '',
+      author: bookMap['author'] ?? '',
     );
     showModalBottomSheet(
       context: context,
@@ -102,7 +104,7 @@ class BuildSection extends StatelessWidget {
                         const Spacer(),
                         SizedBox(
                           width: double.infinity,
-                          child: ElevatedButton(
+                          child: ActionButton(
                             onPressed:
                                 () => _showBookDetails(context, {
                                   'title': book.title,
@@ -116,18 +118,7 @@ class BuildSection extends StatelessWidget {
                                   'description': book.description,
                                   'language': book.language,
                                 }),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.deepPurple,
-                              shape: StadiumBorder(),
-                              minimumSize: Size(80, 32),
-                            ),
-                            child: Text(
-                              "View",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
+                            text: "View",
                           ),
                         ),
                       ],
