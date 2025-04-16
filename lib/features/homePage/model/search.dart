@@ -1,72 +1,155 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
-import 'package:library_management_system/features/homePage/data/book_list.dart';
-import 'package:library_management_system/features/homePage/model/search_result.dart';
+import 'package:library_management_system/features/homePage/data/book.dart';
 
-class Search extends StatelessWidget {
-  const Search({super.key});
+import 'package:library_management_system/features/homePage/model/supabase_book_service.dart';
+import 'package:library_management_system/features/homePage/widgets/book_details.dart';
+import 'package:library_management_system/features/homePage/widgets/book_details_widget.dart';
+
+class Search extends StatefulWidget {
+  const Search({Key? key}) : super(key: key);
+
+  @override
+  _SearchState createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  final BookService _bookService = BookService();
+  final TextEditingController _searchController = TextEditingController();
+  List<Book> _searchResults = [];
+  bool _isSearching = false;
+  
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _performSearch(String query) async {
+    if (query.trim().isEmpty) {
+      setState(() {
+        _searchResults = [];
+        _isSearching = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _isSearching = true;
+    });
+
+    try {
+      // We'll need to implement a search function in BookService
+      // This is a simplified version that fetches all books and filters client-side
+      final allBooks = await _bookService.getAllBooks();
+      final results = allBooks
+          .where((book) =>
+              book.title.toLowerCase().contains(query.toLowerCase()) ||
+              book.subtitle.toLowerCase().contains(query.toLowerCase()) ||
+              book.category.toLowerCase().contains(query.toLowerCase()) ||
+              book.publisher.toLowerCase().contains(query.toLowerCase()) ||
+              book.genre.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+
+      setState(() {
+        _searchResults = results;
+        _isSearching = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isSearching = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Search failed: $e')),
+      );
+    }
+  }
+
+  void _showBookDetails(BuildContext context, Book book) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => FractionallySizedBox(
+        heightFactor: 1.0,
+        child: BookDetails(book: book),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onSubmitted: (query) {
-        if (query.trim().isEmpty) {
-          return;
-        }
-        final foundBooks =
-            BookList.books
-                .where(
-                  (book) =>
-                      book.title.toLowerCase().contains(query.toLowerCase()),
-                )
-                .toList();
-        if (foundBooks.isNotEmpty) {
-          showDialog(
-            context: context,
-            builder:
-                (context) => AlertDialog(
-                  backgroundColor: Colors.white,
-                  title: const Text("Search Results"),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children:
-                          foundBooks
-                                  .map((book) => SearchResult(book: book))
-                                  .toList()
-                              as List<Widget>,
+    return Column(
+      children: [
+        TextField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            hintText: 'Search books...',
+            prefixIcon: Icon(Icons.search, color: AppColors.themeColor),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.themeColor),
+            ),
+          ),
+          onChanged: (value) {
+            if (value.length > 2) {
+              _performSearch(value);
+            } else if (value.isEmpty) {
+              setState(() {
+                _searchResults = [];
+              });
+            }
+          },
+        ),
+        
+        if (_isSearching)
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+          
+        if (_searchResults.isNotEmpty)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            constraints: BoxConstraints(
+              maxHeight: 300,
+            ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _searchResults.length,
+              itemBuilder: (context, index) {
+                final book = _searchResults[index];
+                return ListTile(
+                  leading: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: NetworkImage(book.image),
+                        fit: BoxFit.cover,
+                        onError: (exception, stackTrace) => const AssetImage('assets/images/placeholder.png'),
+                      ),
                     ),
                   ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text("Close"),
-                    ),
-                  ],
-                ),
-          );
-        } else {
-          showDialog(
-            context: context,
-            builder:
-                (context) => AlertDialog(
-                  title: const Text("No Results"),
-                  content: const Text("No books found."),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text("Close"),
-                    ),
-                  ],
-                ),
-          );
-        }
-      },
-      decoration: const InputDecoration(
-        icon: Icon(Icons.search, color: AppColors.themeColor),
-        border: InputBorder.none,
-        hintText: "Search",
-      ),
+                  title: Text(book.title),
+                  subtitle: Text(book.category),
+                  onTap: () => _showBookDetails(context, book),
+                );
+              },
+            ),
+          ),
+      ],
     );
   }
 }
