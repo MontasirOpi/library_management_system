@@ -9,7 +9,6 @@ class Book {
   final int stock;
   final String description;
   final String language;
-  final String author;
 
   Book({
     required this.title,
@@ -22,10 +21,9 @@ class Book {
     required this.stock,
     required this.description,
     required this.language,
-    required this.author,
   });
 
-  factory Book.fromMap(Map<String, String> map) {
+  factory Book.fromMap(Map<String, dynamic> map) {
     return Book(
       title: map['title'] ?? '',
       subtitle: map['subtitle'] ?? '',
@@ -33,11 +31,10 @@ class Book {
       image: map['image'] ?? '',
       publisher: map['publisher'] ?? '',
       genre: map['genre'] ?? '',
-      pages: int.tryParse(map['pages'] ?? '0') ?? 0,
-      stock: int.tryParse(map['stock'] ?? '0') ?? 0,
+      pages: map['pages'] ?? 0,
+      stock: map['stock'] ?? 0,
       description: map['description'] ?? '',
       language: map['language'] ?? '',
-      author: map['author'] ?? '',
     );
   }
 }
