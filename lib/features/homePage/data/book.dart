@@ -9,6 +9,7 @@ class Book {
   final int stock;
   final String description;
   final String language;
+  final String author;
 
   Book({
     required this.title,
@@ -21,6 +22,7 @@ class Book {
     required this.stock,
     required this.description,
     required this.language,
+    required this.author,
   });
 
   factory Book.fromMap(Map<String, String> map) {
@@ -35,6 +37,7 @@ class Book {
       stock: int.tryParse(map['stock'] ?? '0') ?? 0,
       description: map['description'] ?? '',
       language: map['language'] ?? '',
+      author: map['author'] ?? '',
     );
   }
 }
