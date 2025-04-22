@@ -46,9 +46,9 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load categories: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to load categories: $e')));
     }
   }
 
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          'Library Management System',
+          'Library App',
           style: TextStyle(color: AppColors.themeColor, fontSize: 20),
         ),
         centerTitle: true,
@@ -72,14 +72,9 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () => Scaffold.of(context).openDrawer(),
               ),
         ),
-        actionsIconTheme: const IconThemeData(
-          color: AppColors.themeColor,
-        ),
+        actionsIconTheme: const IconThemeData(color: AppColors.themeColor),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Logout(),
-          ),
+          Padding(padding: EdgeInsets.only(right: 16.0), child: Logout()),
         ],
       ),
       body: Padding(
@@ -101,13 +96,9 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child:
                   _isLoading
-                      ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
+                      ? const Center(child: CircularProgressIndicator())
                       : _categories.isEmpty
-                      ? const Center(
-                        child: Text('No categories available'),
-                      )
+                      ? const Center(child: Text('No categories available'))
                       : RefreshIndicator(
                         onRefresh: _loadCategories,
                         child: ListView.builder(

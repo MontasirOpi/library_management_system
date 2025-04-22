@@ -7,9 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 👈 Required for async calls before runApp
 
   // Lock orientation to portraitUp only
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Initialize Supabase
   await supabase.Supabase.initialize(

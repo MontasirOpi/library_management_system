@@ -60,7 +60,12 @@ class _MyProfileState extends State<MyProfile> {
               children: [
                 const CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('assets/images/user.jpg'),
+                  //backgroundImage: AssetImage('assets/images/user.jpg'),
+                  child: Icon(
+                    Icons.person,
+                    size: 100,
+                    color: Colors.deepPurple,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Text(
