@@ -16,11 +16,11 @@ class AppDrawer extends StatelessWidget {
               decoration: BoxDecoration(color: Colors.white),
               child: Center(
                 child: Text(
-                  'Library Management System',
+                  'Library App',
                   style: TextStyle(
                     color: AppColors.themeColor,
                     fontSize: 22,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
