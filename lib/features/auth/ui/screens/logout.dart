@@ -39,8 +39,10 @@ class Logout extends StatelessWidget {
         );
       },
       borderRadius: BorderRadius.circular(50),
-      child: CircleAvatar(
-        backgroundImage: AssetImage('assets/images/user.jpg'),
+      child: Icon(
+        Icons.logout,
+        color: Colors.red,
+        size: 30,
       ),
     );
   }
