@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // 👈 Required for orientation control
+import 'package:flutter/services.dart';
 import 'package:library_management_system/app/app.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // 👈 Required for async calls before runApp
+  WidgetsFlutterBinding.ensureInitialized();
 
   // Lock orientation to portraitUp only
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
