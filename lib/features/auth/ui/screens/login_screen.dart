@@ -20,8 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   void login() async {
-    final email = _emailController.text;
-    final password = _passwordController.text;
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
     try {
       await authService.signInWithEmailPassword(email, password);
       // Navigate to the home page after successful login
