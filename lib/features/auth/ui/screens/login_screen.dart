@@ -22,24 +22,21 @@ class _LoginScreenState extends State<LoginScreen> {
   void login() async {
     final email = _emailController.text;
     final password = _passwordController.text;
-    try{
+    try {
       await authService.signInWithEmailPassword(email, password);
       // Navigate to the home page after successful login
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
-    }
-    catch(e){
+    } catch (e) {
       // Handle error (e.g., show a snackbar or dialog)
       print('Login failed: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Login failed: $e')));
     }
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -62,17 +59,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              BuildTextField(hintText: "Email Id", controller: _emailController),
+              BuildTextField(
+                hintText: "Email Id",
+                controller: _emailController,
+              ),
               SizedBox(height: 20),
               BuildTextField(
                 hintText: "Password",
+                obscureText: true,
                 controller: _passwordController,
               ),
               SizedBox(height: 20),
-              CustomButton(
-                text: 'LOGIN',
-                onPressed: login
-              ),
+              CustomButton(text: 'LOGIN', onPressed: login),
             ],
           ),
         ),
