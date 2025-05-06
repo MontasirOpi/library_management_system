@@ -6,10 +6,8 @@ import 'package:library_management_system/features/homePage/ui/screens/category_
 import 'package:library_management_system/features/homePage/widgets/book_details_widget.dart';
 
 class BuildSection extends StatefulWidget {
-  const BuildSection({Key? key, required this.context, required this.category})
-    : super(key: key);
+  const BuildSection({Key? key, required this.category}) : super(key: key);
 
-  final BuildContext context;
   final String category;
 
   @override
@@ -56,11 +54,11 @@ class _BuildSectionState extends State<BuildSection> {
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder:
           (_) => FractionallySizedBox(
-            heightFactor: 1.0,
+            heightFactor: 0.95,
             child: BookDetails(book: book),
           ),
     );
@@ -76,7 +74,7 @@ class _BuildSectionState extends State<BuildSection> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.category,
+              widget.category.toUpperCase(),
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             TextButton(

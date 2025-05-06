@@ -104,10 +104,7 @@ class _HomePageState extends State<HomePage> {
                         child: ListView.builder(
                           itemCount: _categories.length,
                           itemBuilder: (context, index) {
-                            return BuildSection(
-                              context: context,
-                              category: _categories[index],
-                            );
+                            return BuildSection(category: _categories[index]);
                           },
                         ),
                       ),

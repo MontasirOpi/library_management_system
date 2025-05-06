@@ -63,7 +63,7 @@ class BookService {
       await supabase.from('books').insert({
         'title': book.title,
         'subtitle': book.subtitle,
-        'category': book.category,
+        'category': book.category.toUpperCase(),
         'image': book.image,
         'publisher': book.publisher,
         'genre': book.genre,

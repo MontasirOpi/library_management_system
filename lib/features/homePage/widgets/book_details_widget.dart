@@ -11,120 +11,122 @@ class BookDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0,32,0,0),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Book Details',
-            style: TextStyle(color: AppColors.themeColor),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.close, color: AppColors.themeColor),
-            onPressed: () => Navigator.pop(context),
-          ),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Book Image
-              Container(
-                height: 250,
-                width: double.infinity,
-                color: AppColors.themeColor.withOpacity(0.1),
-                child: Center(
-                  child: Hero(
-                    tag: book.title,
-                    child: Image.network(
-                      book.image,
-                      height: 200,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(
-                          Icons.broken_image,
-                          size: 100,
-                          color: Colors.grey,
-                        );
-                      },
-                    ),
+    final supabase = Supabase.instance.client;
+    final user = supabase.auth.currentUser;
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            // Header with close button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.close, color: AppColors.themeColor),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                const Text(
+                  'Book Details',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.themeColor,
                   ),
                 ),
-              ),
-      
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+                const SizedBox(width: 48), // For symmetry
+              ],
+            ),
+
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Book image
+                    Container(
+                      height: 200,
+                      width: double.infinity,
+                      color: AppColors.themeColor.withOpacity(0.1),
+                      child: Center(
+                        child: Hero(
+                          tag: book.title,
+                          child: Image.network(
+                            book.image,
+                            height: 160,
+                            fit: BoxFit.contain,
+                            errorBuilder:
+                                (_, __, ___) => const Icon(
+                                  Icons.broken_image,
+                                  size: 100,
+                                  color: Colors.grey,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
                     Text(
                       book.title,
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     if (book.subtitle.isNotEmpty)
                       Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
+                        padding: const EdgeInsets.only(top: 4),
                         child: Text(
                           book.subtitle,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
+                          style: const TextStyle(color: Colors.grey),
                         ),
                       ),
+
                     const SizedBox(height: 16),
-      
-                    // Stock
+
+                    // Stock info
                     Row(
                       children: [
                         ValueListenableBuilder<int>(
                           valueListenable: book.stockNotifier,
-                          builder: (context, stock, child) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
+                          builder:
+                              (_, stock, __) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: stock > 0 ? Colors.green : Colors.red,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  stock > 0 ? 'Available' : 'Out of Stock',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                               ),
-                              decoration: BoxDecoration(
-                                color: stock > 0 ? Colors.green : Colors.red,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                stock > 0 ? 'Available' : 'Out of Stock',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            );
-                          },
                         ),
                         const SizedBox(width: 8),
                         ValueListenableBuilder<int>(
                           valueListenable: book.stockNotifier,
-                          builder: (context, stock, child) {
-                            return Text('$stock copies in stock');
-                          },
+                          builder: (_, stock, __) => Text('$stock copies'),
                         ),
                       ],
                     ),
-      
-                    const SizedBox(height: 24),
-      
-                    // Book Info
+
+                    const SizedBox(height: 16),
+
                     Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      elevation: 2,
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _detailRow('Category', book.category),
+                            _detailRow('Category', book.category.toUpperCase()),
                             _detailRow('Genre', book.genre),
                             _detailRow('Publisher', book.publisher),
                             _detailRow('Language', book.language),
@@ -133,76 +135,74 @@ class BookDetails extends StatelessWidget {
                         ),
                       ),
                     ),
-      
-                    const SizedBox(height: 24),
-      
+
+                    const SizedBox(height: 16),
+
                     const Text(
                       'Description',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       book.description,
                       style: const TextStyle(fontSize: 16, height: 1.5),
                     ),
-      
+
                     const SizedBox(height: 32),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: CustomButton(
-            text: 'Borrow Book',
-            onPressed: () async {
-              final supabase = Supabase.instance.client;
-              final user = supabase.auth.currentUser;
-      
-              if (user == null || book.stock <= 0) return;
-      
-              try {
-                final existing = await supabase
-                    .from('issued_books')
-                    .select()
-                    .eq('book_id', book.id)
-                    .eq('user_id', user.id);
-      
-                if (existing.isNotEmpty) {
+            ),
+
+            // Borrow Button
+            CustomButton(
+              text: 'Borrow Book',
+              onPressed: () async {
+                if (user == null || book.stock <= 0) return;
+
+                try {
+                  final existing = await supabase
+                      .from('issued_books')
+                      .select()
+                      .eq('book_id', book.id)
+                      .eq('user_id', user.id);
+
+                  if (existing.isNotEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('You already borrowed this book.'),
+                      ),
+                    );
+                    return;
+                  }
+
+                  await supabase.from('issued_books').insert({
+                    'book_id': book.id,
+                    'user_id': user.id,
+                  });
+
+                  await supabase
+                      .from('books')
+                      .update({'stock': book.stock - 1})
+                      .eq('id', book.id);
+
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('You already borrowed this book.'),
-                    ),
+                    const SnackBar(content: Text('Book borrowed successfully')),
                   );
-                  return;
+
+                  Navigator.pop(context);
+                } catch (e) {
+                  print('Borrow error: $e');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Error borrowing book')),
+                  );
                 }
-      
-                // ✅ Step 2: Borrow the book (insert + reduce stock)
-                await supabase.from('issued_books').insert({
-                  'book_id': book.id,
-                  'user_id': user.id,
-                });
-      
-                await supabase
-                    .from('books')
-                    .update({'stock': book.stock - 1})
-                    .eq('id', book.id);
-      
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Book borrowed successfully')),
-                );
-      
-                Navigator.pop(context);
-              } catch (e) {
-                print('Borrow error: $e');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Error borrowing book')),
-                );
-              }
-            },
-          ),
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -210,18 +210,12 @@ class BookDetails extends StatelessWidget {
 
   Widget _detailRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         children: [
           SizedBox(
             width: 100,
-            child: Text(
-              '$label:',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            child: Text('$label:', style: const TextStyle(color: Colors.grey)),
           ),
           Expanded(
             child: Text(
