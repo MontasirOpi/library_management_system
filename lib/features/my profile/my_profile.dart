@@ -60,7 +60,7 @@ class _MyProfileState extends State<MyProfile> {
               children: [
                 const CircleAvatar(
                   radius: 50,
-                  //backgroundImage: AssetImage('assets/images/user.jpg'),
+                  //backgroundImage: AssetImage('assets/images/user.png'),
                   child: Icon(
                     Icons.person,
                     size: 100,
@@ -85,19 +85,17 @@ class _MyProfileState extends State<MyProfile> {
                   email ?? '',
                   style: const TextStyle(fontSize: 16, color: Colors.grey),
                 ),
-                const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    // TODO: Navigate to edit profile screen
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                      vertical: 12,
-                    ),
-                  ),
-                  child: const Text('Edit Profile'),
-                ),
+                //const SizedBox(height: 30),
+                // ElevatedButton(
+                //   onPressed: () {},
+                //   style: ElevatedButton.styleFrom(
+                //     padding: const EdgeInsets.symmetric(
+                //       horizontal: 30,
+                //       vertical: 12,
+                //     ),
+                //   ),
+                //   child: const Text('Edit Profile'),
+                // ),
               ],
             ),
           ),
