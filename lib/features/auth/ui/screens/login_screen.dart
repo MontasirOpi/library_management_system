@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/app/assets_path.dart';
 import 'package:library_management_system/features/auth/model/auth_service.dart';
 import 'package:library_management_system/features/common/widgets/build_text_field_widget.dart';
@@ -41,7 +42,23 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login'), backgroundColor: Colors.white),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.themeColor),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Login',
+          style: TextStyle(
+            color: AppColors.themeColor,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(

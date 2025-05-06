@@ -11,10 +11,18 @@ class IssuedBooks extends StatefulWidget {
   State<IssuedBooks> createState() => _IssuedBooksState();
 }
 
+// Wrapper to hold both book and issued_at date
+class IssuedBook {
+  final Book book;
+  final DateTime issuedAt;
+
+  IssuedBook({required this.book, required this.issuedAt});
+}
+
 class _IssuedBooksState extends State<IssuedBooks> {
   final supabase = Supabase.instance.client;
   String? userId;
-  List<Book> issuedBooks = [];
+  List<IssuedBook> issuedBooks = [];
   bool isLoading = true;
 
   @override
@@ -29,7 +37,7 @@ class _IssuedBooksState extends State<IssuedBooks> {
       final response = await supabase
           .from('issued_books')
           .select(
-            'book:book_id (id, title, subtitle, category, image, publisher, genre, pages, stock, description, language)',
+            'issued_at, book:book_id (id, title, subtitle, category, image, publisher, genre, pages, stock, description, language)',
           )
           .eq('user_id', userId!);
 
@@ -39,10 +47,16 @@ class _IssuedBooksState extends State<IssuedBooks> {
         issuedBooks =
             booksData.map((row) {
               final bookMap = row['book'] as Map<String, dynamic>;
-              return Book.fromMap(bookMap);
+              final issuedAt = DateTime.parse(row['issued_at']);
+              return IssuedBook(
+                book: Book.fromMap(bookMap),
+                issuedAt: issuedAt,
+              );
             }).toList();
         isLoading = false;
       });
+
+      checkOverdueBooks();
     } catch (e) {
       print('Error fetching issued books: $e');
       setState(() {
@@ -51,16 +65,33 @@ class _IssuedBooksState extends State<IssuedBooks> {
     }
   }
 
+  void checkOverdueBooks() {
+    final now = DateTime.now();
+    for (var issuedBook in issuedBooks) {
+      final days = now.difference(issuedBook.issuedAt).inDays;
+      if (days > 7) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red[600],
+              content: Text(
+                'The book "${issuedBook.book.title}" is overdue! Please return it as soon as possible.',
+              ),
+            ),
+          );
+        });
+      }
+    }
+  }
+
   Future<void> returnBook(Book book) async {
     try {
-      // Delete from issued_books
       await supabase
           .from('issued_books')
           .delete()
           .eq('book_id', book.id)
           .eq('user_id', supabase.auth.currentUser!.id);
 
-      // Update book stock
       await supabase
           .from('books')
           .update({'stock': book.stock + 1})
@@ -70,7 +101,6 @@ class _IssuedBooksState extends State<IssuedBooks> {
         const SnackBar(content: Text('Book returned successfully')),
       );
 
-      // Refresh issued books list
       fetchIssuedBooks();
     } catch (e) {
       print('Error returning book: $e');
@@ -78,6 +108,12 @@ class _IssuedBooksState extends State<IssuedBooks> {
         context,
       ).showSnackBar(const SnackBar(content: Text('Failed to return book')));
     }
+  }
+
+  String calculateDaysSinceBorrowed(DateTime borrowedDate) {
+    final now = DateTime.now();
+    final difference = now.difference(borrowedDate).inDays;
+    return difference == 0 ? 'Today' : '$difference days ago';
   }
 
   @override
@@ -88,7 +124,7 @@ class _IssuedBooksState extends State<IssuedBooks> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.deepPurple),
+          icon: const Icon(Icons.arrow_back, color: AppColors.themeColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
@@ -110,7 +146,12 @@ class _IssuedBooksState extends State<IssuedBooks> {
                 padding: const EdgeInsets.all(16),
                 itemCount: issuedBooks.length,
                 itemBuilder: (context, index) {
-                  final book = issuedBooks[index];
+                  final issuedBook = issuedBooks[index];
+                  final book = issuedBook.book;
+                  final issuedText = calculateDaysSinceBorrowed(
+                    issuedBook.issuedAt,
+                  );
+
                   return Card(
                     color: Colors.white,
                     margin: const EdgeInsets.symmetric(vertical: 10),
@@ -141,6 +182,14 @@ class _IssuedBooksState extends State<IssuedBooks> {
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Issued: $issuedText',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
                                   ),
                                 ),
                                 const SizedBox(height: 12),

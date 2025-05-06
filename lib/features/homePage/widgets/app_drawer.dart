@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/features/homePage/ui/screens/issued_books.dart';
+import 'package:library_management_system/features/homePage/ui/screens/notifications_page.dart';
 import 'package:library_management_system/features/my%20profile/my_profile.dart';
 import 'package:library_management_system/app/app_color.dart';
 
@@ -50,7 +51,10 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.notifications, color: Colors.indigo),
               title: const Text('Notifications'),
               onTap: () {
-                // Navigate to Notifications
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const NotificationsPage()),
+                );
               },
             ),
           ],

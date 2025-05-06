@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/auth/model/auth_service.dart';
 import 'package:library_management_system/features/common/widgets/custom_button.dart';
 
@@ -6,7 +7,8 @@ class RegistationProfileScreen extends StatefulWidget {
   const RegistationProfileScreen({super.key});
 
   @override
-  State<RegistationProfileScreen> createState() => _RegistationProfileScreenState();
+  State<RegistationProfileScreen> createState() =>
+      _RegistationProfileScreenState();
 }
 
 class _RegistationProfileScreenState extends State<RegistationProfileScreen> {
@@ -29,9 +31,9 @@ class _RegistationProfileScreenState extends State<RegistationProfileScreen> {
     final roll = _rollController.text.trim();
 
     if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
       return;
     }
 
@@ -45,9 +47,9 @@ class _RegistationProfileScreenState extends State<RegistationProfileScreen> {
       if (mounted) Navigator.pop(context);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Registration failed: $e')));
       }
     }
   }
@@ -65,7 +67,23 @@ class _RegistationProfileScreenState extends State<RegistationProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Registration Form")),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.themeColor),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Registration Form',
+          style: TextStyle(
+            color: AppColors.themeColor,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -152,7 +170,9 @@ class _RegistationProfileScreenState extends State<RegistationProfileScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                    final emailRegex = RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    );
                     if (!emailRegex.hasMatch(value)) {
                       return 'Please enter a valid email address';
                     }
