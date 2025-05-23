@@ -7,8 +7,21 @@ import 'package:library_management_system/features/homePage/widgets/book_details
 class CategoryBooksScreen extends StatelessWidget {
   final String category;
 
-  const CategoryBooksScreen({Key? key, required this.category})
-    : super(key: key);
+  const CategoryBooksScreen({super.key, required this.category});
+  void _showBookDetails(BuildContext context, Book book) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder:
+          (_) => FractionallySizedBox(
+            heightFactor: 0.95,
+            child: BookDetails(book: book),
+          ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,23 +72,7 @@ class CategoryBooksScreen extends StatelessWidget {
                       ),
                       title: Text(book.title),
                       subtitle: Text(book.subtitle),
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(24),
-                            ),
-                          ),
-                          builder:
-                              (_) => FractionallySizedBox(
-                                heightFactor: 1.0,
-                                child: BookDetails(book: book),
-                              ),
-                        );
-                      },
+                      onTap: () => _showBookDetails(context, book),
                     ),
                   );
                 },
