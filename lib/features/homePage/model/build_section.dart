@@ -3,6 +3,7 @@ import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/homePage/data/book.dart';
 import 'package:library_management_system/features/homePage/model/supabase_book_service.dart';
 import 'package:library_management_system/features/homePage/ui/screens/category_books_screen.dart';
+import 'package:library_management_system/features/homePage/widgets/book_details_util.dart';
 import 'package:library_management_system/features/homePage/widgets/book_details_widget.dart';
 
 class BuildSection extends StatefulWidget {
@@ -49,20 +50,20 @@ class _BuildSectionState extends State<BuildSection> {
     }
   }
 
-  void _showBookDetails(BuildContext context, Book book) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder:
-          (_) => FractionallySizedBox(
-            heightFactor: 0.95,
-            child: BookDetails(book: book),
-          ),
-    );
-  }
+  // void _showBookDetails(BuildContext context, Book book) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     builder:
+  //         (_) => FractionallySizedBox(
+  //           heightFactor: 0.95,
+  //           child: BookDetails(book: book),
+  //         ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +155,10 @@ class _BuildSectionState extends State<BuildSection> {
                                   width: double.infinity,
                                   child: ElevatedButton(
                                     onPressed:
-                                        () => _showBookDetails(context, book),
+                                        () => BookDetailsUtil.showBookDetails(
+                                          context,
+                                          book,
+                                        ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.themeColor,
                                       shape: const StadiumBorder(),
