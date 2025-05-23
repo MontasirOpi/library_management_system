@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/homePage/data/book.dart';
 import 'package:library_management_system/features/homePage/model/supabase_book_service.dart';
+import 'package:library_management_system/features/homePage/widgets/book_details_util.dart';
 import 'package:library_management_system/features/homePage/widgets/book_details_widget.dart';
 
 class CategoryBooksScreen extends StatelessWidget {
   final String category;
 
   const CategoryBooksScreen({super.key, required this.category});
-  void _showBookDetails(BuildContext context, Book book) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder:
-          (_) => FractionallySizedBox(
-            heightFactor: 0.95,
-            child: BookDetails(book: book),
-          ),
-    );
-  }
+  // void _showBookDetails(BuildContext context, Book book) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     builder:
+  //         (_) => FractionallySizedBox(
+  //           heightFactor: 0.95,
+  //           child: BookDetails(book: book),
+  //         ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,8 @@ class CategoryBooksScreen extends StatelessWidget {
                       ),
                       title: Text(book.title),
                       subtitle: Text(book.subtitle),
-                      onTap: () => _showBookDetails(context, book),
+                      onTap:
+                          () => BookDetailsUtil.showBookDetails(context, book),
                     ),
                   );
                 },
