@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } catch (e) {
       // Handle error (e.g., show a snackbar or dialog)
-      print('Login failed: $e');
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Login failed: $e')));

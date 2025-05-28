@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/auth/ui/screens/logout.dart';
-
 import 'package:library_management_system/features/homePage/model/build_section.dart';
 import 'package:library_management_system/features/homePage/model/search.dart';
 import 'package:library_management_system/features/homePage/model/supabase_book_service.dart';
@@ -32,7 +31,6 @@ class _HomePageState extends State<HomePage> {
 
     try {
       final books = await _bookService.getAllBooks();
-      // Extract unique categories
       final uniqueCategories = <String>{};
       for (var book in books) {
         uniqueCategories.add(book.category);
@@ -68,48 +66,52 @@ class _HomePageState extends State<HomePage> {
         leading: Builder(
           builder:
               (context) => IconButton(
-                icon: Icon(Icons.menu, color: AppColors.themeColor),
+                icon: const Icon(Icons.menu, color: AppColors.themeColor),
                 onPressed: () => Scaffold.of(context).openDrawer(),
               ),
         ),
         actionsIconTheme: const IconThemeData(color: AppColors.themeColor),
         actions: [
-          Padding(padding: EdgeInsets.only(right: 16.0), child: Logout()),
+          Padding(padding: const EdgeInsets.only(right: 16.0), child: Logout()),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Search Bar
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusScope.of(context).unfocus(), // ⬅ Hides keyboard
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // Search Bar
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Search(),
               ),
-              child: Search(),
-            ),
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            // Sections
-            Expanded(
-              child:
-                  _isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : _categories.isEmpty
-                      ? const Center(child: Text('No categories available'))
-                      : RefreshIndicator(
-                        onRefresh: _loadCategories,
-                        child: ListView.builder(
-                          itemCount: _categories.length,
-                          itemBuilder: (context, index) {
-                            return BuildSection(category: _categories[index]);
-                          },
+              // Sections
+              Expanded(
+                child:
+                    _isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : _categories.isEmpty
+                        ? const Center(child: Text('No categories available'))
+                        : RefreshIndicator(
+                          onRefresh: _loadCategories,
+                          child: ListView.builder(
+                            itemCount: _categories.length,
+                            itemBuilder: (context, index) {
+                              return BuildSection(category: _categories[index]);
+                            },
+                          ),
                         ),
-                      ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
