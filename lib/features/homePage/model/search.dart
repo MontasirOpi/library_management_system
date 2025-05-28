@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/homePage/data/book.dart';
-
 import 'package:library_management_system/features/homePage/model/supabase_book_service.dart';
-import 'package:library_management_system/features/homePage/widgets/book_details_widget.dart';
+import 'package:library_management_system/features/homePage/widgets/book_details_util.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -43,13 +42,7 @@ class _SearchState extends State<Search> {
           allBooks
               .where(
                 (book) =>
-                    book.title.toLowerCase().contains(query.toLowerCase()) ||
-                    book.subtitle.toLowerCase().contains(query.toLowerCase()) ||
-                    book.category.toLowerCase().contains(query.toLowerCase()) ||
-                    book.publisher.toLowerCase().contains(
-                      query.toLowerCase(),
-                    ) ||
-                    book.genre.toLowerCase().contains(query.toLowerCase()),
+                    book.title.toLowerCase().contains(query.toLowerCase()),
               )
               .toList();
 
@@ -65,21 +58,6 @@ class _SearchState extends State<Search> {
         context,
       ).showSnackBar(SnackBar(content: Text('Search failed: $e')));
     }
-  }
-
-  void _showBookDetails(BuildContext context, Book book) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder:
-          (_) => FractionallySizedBox(
-            heightFactor: 1.0,
-            child: BookDetails(book: book),
-          ),
-    );
   }
 
   @override
@@ -148,7 +126,7 @@ class _SearchState extends State<Search> {
                   ),
                   title: Text(book.title),
                   subtitle: Text(book.category),
-                  onTap: () => _showBookDetails(context, book),
+                  onTap: () => BookDetailsUtil.showBookDetails(context, book),
                 );
               },
             ),

@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/common/widgets/custom_button.dart';
+import 'package:library_management_system/features/common/widgets/custom_dialogs.dart';
 import 'package:library_management_system/features/homePage/data/book.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BookDetails extends StatelessWidget {
   final Book book;
+  final BuildContext parentContext;
 
-  const BookDetails({super.key, required this.book});
+  const BookDetails({
+    super.key,
+    required this.book,
+    required this.parentContext,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -171,34 +177,45 @@ class BookDetails extends StatelessWidget {
                       .eq('user_id', user.id);
 
                   if (existing.isNotEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('You already borrowed this book.'),
-                      ),
-                    );
+                    Navigator.pop(context); // Close modal first
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showErrorDialog(
+                        parentContext,
+                        'You have already borrowed this book. Please return it before borrowing again.',
+                      );
+                    });
                     return;
                   }
 
+                  // Insert borrow record
                   await supabase.from('issued_books').insert({
                     'book_id': book.id,
                     'user_id': user.id,
                   });
 
+                  // Update stock
                   await supabase
                       .from('books')
                       .update({'stock': book.stock - 1})
                       .eq('id', book.id);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Book borrowed successfully')),
-                  );
+                  Navigator.pop(context); // Close modal
 
-                  Navigator.pop(context);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showSuccessDialog(
+                      parentContext,
+                      'Book borrowed successfully',
+                    );
+                  });
                 } catch (e) {
-                  print('Borrow error: $e');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Error borrowing book')),
-                  );
+                  Navigator.pop(context); // Close modal
+
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showErrorDialog(
+                      parentContext,
+                      'Failed to borrow book. Please try again later.',
+                    );
+                  });
                 }
               },
             ),

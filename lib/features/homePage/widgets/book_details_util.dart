@@ -13,7 +13,7 @@ class BookDetailsUtil {
       builder:
           (_) => FractionallySizedBox(
             heightFactor: 0.95,
-            child: BookDetails(book: book),
+            child: BookDetails(book: book, parentContext: context),
           ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_management_system/app/app_color.dart';
 import 'package:library_management_system/features/common/widgets/action_button.dart';
+import 'package:library_management_system/features/common/widgets/custom_dialogs.dart';
 import 'package:library_management_system/features/homePage/data/book.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -11,7 +12,6 @@ class IssuedBooks extends StatefulWidget {
   State<IssuedBooks> createState() => _IssuedBooksState();
 }
 
-// Wrapper to hold both book and issued_at date
 class IssuedBook {
   final Book book;
   final DateTime issuedAt;
@@ -58,7 +58,6 @@ class _IssuedBooksState extends State<IssuedBooks> {
 
       checkOverdueBooks();
     } catch (e) {
-      print('Error fetching issued books: $e');
       setState(() {
         isLoading = false;
       });
@@ -71,14 +70,16 @@ class _IssuedBooksState extends State<IssuedBooks> {
       final days = now.difference(issuedBook.issuedAt).inDays;
       if (days > 7) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.red[600],
-              content: Text(
-                'The book "${issuedBook.book.title}" is overdue! Please return it as soon as possible.',
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red[600],
+                content: Text(
+                  'The book "${issuedBook.book.title}" is overdue! Please return it as soon as possible.',
+                ),
               ),
-            ),
-          );
+            );
+          }
         });
       }
     }
@@ -97,16 +98,15 @@ class _IssuedBooksState extends State<IssuedBooks> {
           .update({'stock': book.stock + 1})
           .eq('id', book.id);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Book returned successfully')),
-      );
+      if (mounted) {
+        await showSuccessDialog(context, 'Book returned successfully');
+      }
 
       fetchIssuedBooks();
     } catch (e) {
-      print('Error returning book: $e');
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Failed to return book')));
+      if (mounted) {
+        await showErrorDialog(context, 'Failed to return book');
+      }
     }
   }
 

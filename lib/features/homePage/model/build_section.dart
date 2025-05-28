@@ -4,7 +4,6 @@ import 'package:library_management_system/features/homePage/data/book.dart';
 import 'package:library_management_system/features/homePage/model/supabase_book_service.dart';
 import 'package:library_management_system/features/homePage/ui/screens/category_books_screen.dart';
 import 'package:library_management_system/features/homePage/widgets/book_details_util.dart';
-import 'package:library_management_system/features/homePage/widgets/book_details_widget.dart';
 
 class BuildSection extends StatefulWidget {
   const BuildSection({Key? key, required this.category}) : super(key: key);
